@@ -1,5 +1,5 @@
 // Copy these blocks into your app's wrangler.jsonc (merge with your own name/assets).
-// The alias values point at catalyst-cloudflare's shims (resolved from node_modules).
+// The alias values point at @sauravvarma/catalyst-cloudflare's shims (resolved from node_modules).
 {
     "compatibility_date": "2025-09-01",
     "compatibility_flags": ["nodejs_compat"],
@@ -14,24 +14,24 @@
         "@catalyst/template/server/server.js": "./build/server.js",
 
         // Adapter shims:
-        "react-dom/server": "catalyst-cloudflare/worker/react-dom-server-shim.js",
-        "fs": "catalyst-cloudflare/worker/fs-shim.js",
-        "body-parser": "catalyst-cloudflare/worker/body-parser-stub.js",
-        "compression": "catalyst-cloudflare/worker/middleware-factory-stub.js",
-        "express-static-gzip": "catalyst-cloudflare/worker/middleware-factory-stub.js",
-        "tty": "catalyst-cloudflare/worker/tty-stub.js",
-        "node:tty": "catalyst-cloudflare/worker/tty-stub.js",
-        "@opentelemetry/api": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/auto-instrumentations-node": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/exporter-metrics-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/exporter-metrics-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/exporter-trace-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/exporter-trace-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/resources": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/sdk-metrics": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/sdk-node": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/sdk-trace-node": "catalyst-cloudflare/worker/empty-stub.js",
-        "@opentelemetry/semantic-conventions": "catalyst-cloudflare/worker/empty-stub.js"
+        "react-dom/server": "@sauravvarma/catalyst-cloudflare/worker/react-dom-server-shim.js",
+        "fs": "@sauravvarma/catalyst-cloudflare/worker/fs-shim.js",
+        "body-parser": "@sauravvarma/catalyst-cloudflare/worker/body-parser-stub.js",
+        "compression": "@sauravvarma/catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "express-static-gzip": "@sauravvarma/catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "tty": "@sauravvarma/catalyst-cloudflare/worker/tty-stub.js",
+        "node:tty": "@sauravvarma/catalyst-cloudflare/worker/tty-stub.js",
+        "@opentelemetry/api": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/auto-instrumentations-node": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-grpc": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-http": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-grpc": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-http": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/resources": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-metrics": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-node": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-trace-node": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/semantic-conventions": "@sauravvarma/catalyst-cloudflare/worker/empty-stub.js"
     },
 
     "define": {

@@ -5,7 +5,7 @@ Cloudflare Worker** (via `httpServerHandler` + `nodejs_compat`), not in a contai
 
 This repo contains:
 
-- **`adapter/`**: [`catalyst-cloudflare`](adapter/README.md), the reusable adapter (worker
+- **`adapter/`**: [`@sauravvarma/catalyst-cloudflare`](adapter/README.md), the reusable adapter (worker
   runtime, shims, prebuild, wrangler template) that makes a Catalyst app run on Workers.
 - **`test-app/`**: a small two-route Catalyst example wired to the adapter, deployed live at
   `https://catalyst-test-app.varmasaurav95.workers.dev`. See its

@@ -22,7 +22,7 @@ This is written to start a conversation, not to land a specific PR yet.
 - Example repo (adapter + working app + full write-up): https://github.com/sauravvarma/catalyst-cloudflare-plugin
 - Live demo: https://catalyst-test-app.varmasaurav95.workers.dev
 - Full report covering changes, caveats, the C2-vs-D analysis, the 10-scenario test matrix, and runtime-seam recommendations: [`test-app/CLOUDFLARE-WORKERS.md`](https://github.com/sauravvarma/catalyst-cloudflare-plugin/blob/main/test-app/CLOUDFLARE-WORKERS.md)
-- The `catalyst-cloudflare` adapter: [`adapter/`](https://github.com/sauravvarma/catalyst-cloudflare-plugin/tree/main/adapter)
+- The `@sauravvarma/catalyst-cloudflare` adapter: [`adapter/`](https://github.com/sauravvarma/catalyst-cloudflare-plugin/tree/main/adapter)
 
 ---
 
@@ -33,7 +33,7 @@ possible, ideally `npm run deploy:worker`. Native Workers now supports Node HTTP
 `httpServerHandler` from `cloudflare:node` (with `nodejs_compat`), so Catalyst's production
 Express app is a good fit in principle.
 
-It works today via a small adapter (`catalyst-cloudflare`): a Worker entry that runs the built
+It works today via a small adapter (`@sauravvarma/catalyst-cloudflare`): a Worker entry that runs the built
 Express app, plus shims for a handful of Node-isms that don't hold on the Workers runtime
 (streaming SSR, per-request `fs` reads, a couple of Node-only deps, internal module aliases).
 Details and the full test matrix are in the companion report; here I want to focus on the two
@@ -85,7 +85,7 @@ Page.clientFetcher = ()      => fetch("/api/x").then(r => r.json())
 
 **D: an environment-aware fetch, identical in both fetchers.**
 ```js
-import { apiFetch } from "catalyst-cloudflare/worker/data-fetch"
+import { apiFetch } from "@sauravvarma/catalyst-cloudflare/worker/data-fetch"
 const load = () => apiFetch("/api/x").then(r => r.json())
 Page.serverFetcher = load
 Page.clientFetcher = load
@@ -176,6 +176,6 @@ data-fetch primitive (the highest-leverage one). But I wanted to align on direct
 
 ---
 
-*Appendix:* the working demo, the `catalyst-cloudflare` adapter, and the full options analysis
+*Appendix:* the working demo, the `@sauravvarma/catalyst-cloudflare` adapter, and the full options analysis
 plus the 10-scenario test matrix are in the example repo linked at the top
 (https://github.com/sauravvarma/catalyst-cloudflare-plugin).

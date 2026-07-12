@@ -1,4 +1,4 @@
-# catalyst-cloudflare
+# @sauravvarma/catalyst-cloudflare
 
 Run a [Catalyst](https://catalyst.1mg.com) SSR app **natively on a Cloudflare Worker** (via
 `httpServerHandler` + `nodejs_compat`), not in a container. The adapter bundles the shims and
@@ -7,7 +7,7 @@ runtime wiring that make Catalyst's Node/Express server run on the Workers runti
 ## Install
 
 ```bash
-npm i -D catalyst-cloudflare wrangler
+npm i -D @sauravvarma/catalyst-cloudflare wrangler
 ```
 
 ## Wire it up
@@ -15,7 +15,7 @@ npm i -D catalyst-cloudflare wrangler
 **1. Worker entry**: `worker/index.js` (import the runtime BEFORE the app):
 
 ```js
-import { createWorker } from "catalyst-cloudflare/worker/runtime"
+import { createWorker } from "@sauravvarma/catalyst-cloudflare/worker/runtime"
 import fsAssets from "./fs-assets.generated.js" // produced by the prebuild
 import app from "../build/expressServer.js"
 
@@ -41,7 +41,7 @@ are same-origin `/assets/...`).
 **4. Scripts**: `package.json`:
 
 ```jsonc
-"build:worker":  "node node_modules/catalyst-cloudflare/prebuild.mjs",
+"build:worker":  "node node_modules/@sauravvarma/catalyst-cloudflare/prebuild.mjs",
 "dev:worker":    "npm run build && npm run build:worker && wrangler dev",
 "deploy:worker": "npm run build && npm run build:worker && wrangler deploy"
 ```
@@ -61,7 +61,7 @@ through the `SELF` binding (in-process), forwarding the inbound request's cookie
   ```
 - **D (opt-in, identical call sites):** use the env-aware helper in both.
   ```js
-  import { apiFetch } from "catalyst-cloudflare/worker/data-fetch"
+  import { apiFetch } from "@sauravvarma/catalyst-cloudflare/worker/data-fetch"
   const load = () => apiFetch("/api/x").then(r => r.json())
   Page.serverFetcher = load
   Page.clientFetcher = load

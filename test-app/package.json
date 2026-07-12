@@ -14,7 +14,7 @@
         "setupEmulator": "catalyst setupEmulator",
         "setupEmulator:ios": "catalyst setupEmulator:ios",
         "setupEmulator:android": "catalyst setupEmulator:android",
-        "build:worker": "node node_modules/catalyst-cloudflare/prebuild.mjs",
+        "build:worker": "node node_modules/@sauravvarma/catalyst-cloudflare/prebuild.mjs",
         "dev:worker": "npm run build && npm run build:worker && wrangler dev",
         "deploy:worker": "npm run build && npm run build:worker && wrangler deploy"
     },
@@ -36,7 +36,7 @@
         "tailwindcss": "^4.1.4"
     },
     "devDependencies": {
-        "catalyst-cloudflare": "file:../adapter",
+        "@sauravvarma/catalyst-cloudflare": "^0.1.0",
         "eslint": "^8.26.0",
         "eslint-plugin-react": "^7.34.1",
         "eslint-plugin-react-hooks": "^4.6.0",

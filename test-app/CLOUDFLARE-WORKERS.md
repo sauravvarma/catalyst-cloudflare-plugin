@@ -122,7 +122,7 @@ fails at runtime (this is why `/` first returned 404).
 
 The mechanism underneath every viable option is the same: **dispatch server-side same-origin
 requests to the Worker's own routes in-process via a `SELF` service binding, forwarding the
-inbound request's context (cookies/auth)**. The adapter (`catalyst-cloudflare`, §8) exposes it
+inbound request's context (cookies/auth)**. The adapter (`@sauravvarma/catalyst-cloudflare`, §8) exposes it
 two ways:
 
 - **C2 (shipped in this app):** a transparent `fetch` reroute installed by the runtime. App code
@@ -205,7 +205,7 @@ Each item: **issue → my workaround → proposed change → trade-off.**
 2. Add an **edge/Web-streams SSR path** so streaming isn't lost.
 3. Move build-artifact reads from **runtime `fs`** to **build-time module imports**.
 4. Land **build-time alias resolution** so the plugin needs no hand-maintained alias list.
-5. Treat items 1–4 as the core of a real `catalyst-cloudflare` adapter; the rest of the shims
+5. Treat items 1–4 as the core of a real `@sauravvarma/catalyst-cloudflare` adapter; the rest of the shims
    (tty/otel/middleware stubs) become unnecessary once Catalyst offers an edge server profile.
 
 ---
@@ -239,7 +239,7 @@ Page.clientFetcher = ()      => fetch("/api/x").then(r => r.json())
 
 **D, env-aware fetch, identical in both (PREFERRED).**
 ```js
-import { apiFetch } from "catalyst-cloudflare/worker/data-fetch"
+import { apiFetch } from "@sauravvarma/catalyst-cloudflare/worker/data-fetch"
 const load = () => apiFetch("/api/x").then(r => r.json())
 Page.serverFetcher = load
 Page.clientFetcher = load
@@ -298,7 +298,7 @@ Page.clientFetcher = () => fetch("/api/x").then(r => r.json())
 
 ---
 
-## 8. The packaged adapter (`catalyst-cloudflare`)
+## 8. The packaged adapter (`@sauravvarma/catalyst-cloudflare`)
 
 The shims and runtime wiring are extracted into a reusable package at `../adapter`
 (consumed by this app via `file:` + `--install-links`). An app adopts Workers by: installing
