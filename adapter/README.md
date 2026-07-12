@@ -12,7 +12,7 @@ npm i -D catalyst-cloudflare wrangler
 
 ## Wire it up
 
-**1. Worker entry** — `worker/index.js` (import the runtime BEFORE the app):
+**1. Worker entry**: `worker/index.js` (import the runtime BEFORE the app):
 
 ```js
 import { createWorker } from "catalyst-cloudflare/worker/runtime"
@@ -22,10 +22,10 @@ import app from "../build/expressServer.js"
 export default createWorker(app, { fsAssets })
 ```
 
-**2. Config** — `config/config.json`: set `"PUBLIC_STATIC_ASSET_URL": ""` (so SSR asset URLs
+**2. Config**: `config/config.json`: set `"PUBLIC_STATIC_ASSET_URL": ""` (so SSR asset URLs
 are same-origin `/assets/...`).
 
-**3. wrangler.jsonc** — copy the blocks from `wrangler.partial.jsonc` (set your worker name in
+**3. wrangler.jsonc**: copy the blocks from `wrangler.partial.jsonc` (set your worker name in
 `name` and the `SELF` service binding), and add your `assets` block:
 
 ```jsonc
@@ -38,7 +38,7 @@ are same-origin `/assets/...`).
 }
 ```
 
-**4. Scripts** — `package.json`:
+**4. Scripts**: `package.json`:
 
 ```jsonc
 "build:worker":  "node node_modules/catalyst-cloudflare/prebuild.mjs",
@@ -49,7 +49,7 @@ are same-origin `/assets/...`).
 ## Server-side data fetching (the isomorphism)
 
 Catalyst runs one data operation per route in two transports: `serverFetcher` on direct
-hit/SSR, `clientFetcher` on client navigation — both must hit the **same** handler. A Worker
+hit/SSR, `clientFetcher` on client navigation, both must hit the **same** handler. A Worker
 can't fetch its own public hostname, so the adapter reroutes server-side same-origin fetches
 through the `SELF` binding (in-process), forwarding the inbound request's cookies/auth.
 
