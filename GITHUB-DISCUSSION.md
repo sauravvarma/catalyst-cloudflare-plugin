@@ -18,6 +18,12 @@ Getting there surfaced two things worth discussing with the community:
 
 This is written to start a conversation, not to land a specific PR yet.
 
+**Links**
+- Example repo (adapter + working app + full write-up): https://github.com/sauravvarma/catalyst-cloudflare-plugin
+- Live demo: https://catalyst-test-app.varmasaurav95.workers.dev
+- Full report — changes, caveats, C2-vs-D analysis, 10-scenario test matrix, runtime-seam recs: [`test-app/CLOUDFLARE-WORKERS.md`](https://github.com/sauravvarma/catalyst-cloudflare-plugin/blob/main/test-app/CLOUDFLARE-WORKERS.md)
+- The `catalyst-cloudflare` adapter: [`adapter/`](https://github.com/sauravvarma/catalyst-cloudflare-plugin/tree/main/adapter)
+
 ---
 
 ## The goal
@@ -170,5 +176,6 @@ data-fetch primitive (the highest-leverage one). But I wanted to align on direct
 
 ---
 
-*Appendix:* working demo, the `catalyst-cloudflare` adapter, and the full options analysis +
-10-scenario test matrix are available in the companion report (`CLOUDFLARE-WORKERS.md`).
+*Appendix:* the working demo, the `catalyst-cloudflare` adapter, and the full options analysis +
+10-scenario test matrix are in the example repo linked at the top
+(https://github.com/sauravvarma/catalyst-cloudflare-plugin).
