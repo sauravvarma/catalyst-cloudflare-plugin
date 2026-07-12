@@ -1,0 +1,8 @@
+node_modules/
+build/
+dist/
+logs/
+.wrangler/
+.DS_Store
+**/.claude/settings.local.json
+test-app/worker/fs-assets.generated.js

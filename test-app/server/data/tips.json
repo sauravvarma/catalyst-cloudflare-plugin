@@ -1,0 +1,8 @@
+{
+    "tips": [
+        "serverFetcher runs during SSR; clientFetcher runs on client-side navigation.",
+        "useCurrentRouteData() exposes isFetching, error, data, and refetch.",
+        "Middlewares added in server/server.js run before the SSR catch-all.",
+        "This block was fetched purely on the client, after the page hydrated."
+    ]
+}

@@ -1,0 +1,47 @@
+// Copy these blocks into your app's wrangler.jsonc (merge with your own name/assets).
+// The alias values point at catalyst-cloudflare's shims (resolved from node_modules).
+{
+    "compatibility_date": "2025-09-01",
+    "compatibility_flags": ["nodejs_compat"],
+
+    // Self service binding — enables in-process dispatch for server-side same-origin fetches.
+    "services": [{ "binding": "SELF", "service": "YOUR_WORKER_NAME" }],
+
+    "alias": {
+        // App-specific: the 3 @catalyst/* specifiers the built app requires -> build/.
+        "@catalyst/server/renderer": "./build/renderer/index.js",
+        "@catalyst/server/utils/validator": "./build/utils/validator.js",
+        "@catalyst/template/server/server.js": "./build/server.js",
+
+        // Adapter shims:
+        "react-dom/server": "catalyst-cloudflare/worker/react-dom-server-shim.js",
+        "fs": "catalyst-cloudflare/worker/fs-shim.js",
+        "body-parser": "catalyst-cloudflare/worker/body-parser-stub.js",
+        "compression": "catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "express-static-gzip": "catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "tty": "catalyst-cloudflare/worker/tty-stub.js",
+        "node:tty": "catalyst-cloudflare/worker/tty-stub.js",
+        "@opentelemetry/api": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/auto-instrumentations-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/resources": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-metrics": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-trace-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/semantic-conventions": "catalyst-cloudflare/worker/empty-stub.js"
+    },
+
+    "define": {
+        "__dirname": "\"/\"",
+        "__filename": "\"/worker/index.js\"",
+        "process.env.NODE_ENV": "\"production\"",
+        "process.env.IS_DEV_COMMAND": "\"false\"",
+        "process.env.src_path": "\"/\"",
+        "process.env.BUILD_OUTPUT_PATH": "\"build\"",
+        "process.env.PUBLIC_STATIC_ASSET_PATH": "\"/assets/\"",
+        "process.env.PUBLIC_STATIC_ASSET_URL": "\"\""
+    }
+}

@@ -1,0 +1,6 @@
+node_modules
+build
+logs
+dist
+.wrangler
+worker/fs-assets.generated.js

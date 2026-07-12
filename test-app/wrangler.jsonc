@@ -1,0 +1,63 @@
+{
+    "name": "catalyst-test-app",
+    "main": "worker/index.js",
+    "compatibility_date": "2025-09-01",
+    "compatibility_flags": ["nodejs_compat"],
+    // Self service binding: lets server-side data fetching dispatch to this Worker's own
+    // routes in-process (see worker/index.js __selfFetch), instead of a public self-fetch.
+    "services": [{ "binding": "SELF", "service": "catalyst-test-app" }],
+    "assets": {
+        // Hashed client assets live under assets/ (matches PUBLIC_STATIC_ASSET_PATH=/assets/);
+        // service-worker + offline files sit at the root. Non-asset requests fall through
+        // to the Worker, which runs the Catalyst SSR renderer + /api routes.
+        "directory": "./dist/public",
+        "not_found_handling": "none",
+        "run_worker_first": ["/", "/about", "/api/*"]
+    },
+    "alias": {
+        // Runtime module-alias equivalents (module-alias's require hook doesn't run here).
+        // wrangler alias is exact-match, so map each specifier the built app requires.
+        "@catalyst/server/renderer": "./build/renderer/index.js",
+        "@catalyst/server/utils/validator": "./build/utils/validator.js",
+        "@catalyst/template/server/server.js": "./build/server.js",
+        // Adapter shims (resolved from node_modules/catalyst-cloudflare).
+        "react-dom/server": "catalyst-cloudflare/worker/react-dom-server-shim.js",
+        "fs": "catalyst-cloudflare/worker/fs-shim.js",
+        "body-parser": "catalyst-cloudflare/worker/body-parser-stub.js",
+        "compression": "catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "express-static-gzip": "catalyst-cloudflare/worker/middleware-factory-stub.js",
+        "tty": "catalyst-cloudflare/worker/tty-stub.js",
+        "node:tty": "catalyst-cloudflare/worker/tty-stub.js",
+        "@opentelemetry/api": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/auto-instrumentations-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-metrics-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-grpc": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/exporter-trace-otlp-http": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/resources": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-metrics": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/sdk-trace-node": "catalyst-cloudflare/worker/empty-stub.js",
+        "@opentelemetry/semantic-conventions": "catalyst-cloudflare/worker/empty-stub.js"
+    },
+    "define": {
+        // Not defined in the ESM Worker bundle; the only use is a dead favicon route
+        // (Workers Assets serves /favicon.ico before the Worker runs).
+        "__dirname": "\"/\"",
+        "__filename": "\"/worker/index.js\"",
+        "process.env.NODE_ENV": "\"production\"",
+        "process.env.IS_DEV_COMMAND": "\"false\"",
+        "process.env.src_path": "\"/\"",
+        "process.env.BUILD_OUTPUT_PATH": "\"build\"",
+        "process.env.PUBLIC_STATIC_ASSET_PATH": "\"/assets/\"",
+        "process.env.PUBLIC_STATIC_ASSET_URL": "\"\""
+    },
+    "vars": {
+        "NODE_ENV": "production",
+        "IS_DEV_COMMAND": "false",
+        "src_path": "/",
+        "BUILD_OUTPUT_PATH": "build",
+        "PUBLIC_STATIC_ASSET_PATH": "/assets/",
+        "PUBLIC_STATIC_ASSET_URL": ""
+    }
+}

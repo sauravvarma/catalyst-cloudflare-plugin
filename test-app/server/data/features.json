@@ -1,0 +1,24 @@
+{
+    "features": [
+        {
+            "id": 1,
+            "title": "Server-Side Rendering",
+            "description": "Pages render on the server and hydrate on the client out of the box."
+        },
+        {
+            "id": 2,
+            "title": "Route-level Data Fetching",
+            "description": "Attach serverFetcher / clientFetcher to a route component to load data."
+        },
+        {
+            "id": 3,
+            "title": "Cloudflare Workers Ready",
+            "description": "The same bundle is designed to run natively on a Cloudflare Worker."
+        },
+        {
+            "id": 4,
+            "title": "File-based JSON Source",
+            "description": "This list is parsed from server/data/features.json by the Express server."
+        }
+    ]
+}

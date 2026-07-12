@@ -1,0 +1,12 @@
+{
+    "name": "catalyst-cloudflare",
+    "version": "0.1.0",
+    "description": "Adapter to run a Catalyst SSR app natively on a Cloudflare Worker (httpServerHandler + nodejs_compat).",
+    "type": "module",
+    "files": ["worker", "prebuild.mjs", "wrangler.partial.jsonc"],
+    "peerDependencies": {
+        "catalyst-core": "*",
+        "react-dom": "*",
+        "wrangler": ">=4.40.0"
+    }
+}

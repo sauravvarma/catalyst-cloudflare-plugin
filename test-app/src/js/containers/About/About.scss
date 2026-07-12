@@ -1,0 +1,109 @@
+.card {
+    max-width: 560px;
+    width: 100%;
+    background: #161a23;
+    border: 1px solid #232838;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+}
+
+.heading {
+    margin: 0 0 12px;
+    font-size: 40px;
+    color: #ffffff;
+}
+
+.lead {
+    margin: 0 0 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #b8bdcc;
+}
+
+.lead code {
+    background: #0f1117;
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: #61dafb;
+    font-size: 14px;
+}
+
+.state {
+    color: #b8bdcc;
+    font-size: 14px;
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 14px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    text-align: left;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 0;
+    border-bottom: 1px solid #232838;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.itemTitle {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.itemDesc {
+    font-size: 14px;
+    color: #b8bdcc;
+}
+
+.garnish {
+    margin: 0 0 28px;
+    padding: 16px;
+    border: 1px dashed #2f3547;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.garnishLabel {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #61dafb;
+    margin-bottom: 10px;
+}
+
+.garnishList {
+    margin: 0;
+    padding-left: 18px;
+    color: #b8bdcc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.cta {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 10px;
+    background: #61dafb;
+    color: #0f1117;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.12s ease;
+}
+
+.cta:hover {
+    transform: translateY(-1px);
+}
