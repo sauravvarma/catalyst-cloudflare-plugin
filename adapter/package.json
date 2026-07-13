@@ -1,8 +1,11 @@
 {
     "name": "@sauravvarma/catalyst-cloudflare",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Adapter to run a Catalyst SSR app natively on a Cloudflare Worker (httpServerHandler + nodejs_compat).",
     "type": "module",
+    "bin": {
+        "catalyst-cloudflare": "bin/cli.mjs"
+    },
     "license": "MIT",
     "author": "Saurav Varma",
     "homepage": "https://github.com/sauravvarma/catalyst-cloudflare-plugin/tree/main/adapter",
@@ -12,7 +15,7 @@
         "directory": "adapter"
     },
     "keywords": ["catalyst", "cloudflare", "workers", "ssr", "adapter", "httpServerHandler"],
-    "files": ["worker", "prebuild.mjs", "wrangler.partial.jsonc"],
+    "files": ["worker", "lib", "bin", "prebuild.mjs"],
     "publishConfig": {
         "access": "public"
     },

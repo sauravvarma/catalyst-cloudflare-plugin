@@ -6,9 +6,10 @@
 // invokes the same callbacks and writes the HTML to the response in one shot.
 //
 // aliased for the bare `react-dom/server` specifier only; the import below uses
-// `react-dom/server.browser`, so there's no self-recursion.
-export * from "react-dom/server.browser"
-import { renderToString } from "react-dom/server.browser"
+// `react-dom/server.edge` (the Web-Streams build react-dom's own `workerd` export
+// condition selects), so there's no self-recursion and it resolves on the Workers runtime.
+export * from "react-dom/server.edge"
+import { renderToString } from "react-dom/server.edge"
 
 export function renderToPipeableStream(node, options = {}) {
     let html = ""

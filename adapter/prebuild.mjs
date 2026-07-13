@@ -1,8 +1,12 @@
-// catalyst-cloudflare prebuild — run from the Catalyst app root AFTER `catalyst build`.
-// Prepares everything wrangler needs to bundle the Worker:
-//   1. copies server/data -> build/data (babel doesn't copy non-JS server assets);
-//   2. stages build/public -> dist/public/assets (+ SW/offline/favicon at root) for Workers Assets;
-//   3. generates worker/fs-assets.generated.js (the map the fs-shim serves at request time).
+// catalyst-cloudflare prebuild — run from the Catalyst app root AFTER `catalyst build`
+// (wired as the `build:worker` script by `catalyst-cloudflare init`). Prepares everything
+// wrangler needs to bundle the Worker:
+//   1. generates worker/index.js + wrangler.jsonc from the in-package templates, using
+//      the app's `catalystCloudflare` config (name/routes/wrangler passthrough);
+//   2. copies server/data -> build/data (babel doesn't copy non-JS server assets);
+//   3. stages build/public -> dist/public/assets (+ SW/offline/favicon at root) for
+//      Workers Assets, and normalizes the build-time asset URL to same-origin;
+//   4. generates worker/fs-assets.generated.js (the map the fs-shim serves at request time).
 import {
     readFileSync,
     writeFileSync,
@@ -14,6 +18,7 @@ import {
     statSync,
 } from "node:fs"
 import { join } from "node:path"
+import { generate } from "./lib/adapter.mjs"
 
 const ROOT = process.cwd()
 const BUILD_PUBLIC = join(ROOT, "build", "public")
@@ -23,30 +28,76 @@ if (!existsSync(BUILD_PUBLIC)) {
     process.exit(1)
 }
 
-// 1. server/data -> build/data
+// 1. generate worker/index.js + wrangler.jsonc from the app's catalystCloudflare config.
+const cfg = generate(ROOT)
+
+// webpack's DefinePlugin bakes the asset origin (PUBLIC_STATIC_ASSET_URL) into both the
+// client bundle (runtime.js publicPath, loadable-stats.json) and the server bundle
+// (build/renderer/handler.js publicAssetPath) at `catalyst build` time — as a literal
+// string, so the Worker's `define`/`vars` have no process.env token left to override. On
+// Workers we serve assets same-origin, so strip the configured origin from the built
+// output. We read the value from the app's config.json but never mutate that file (the
+// Node/container target shares it).
+let assetOrigin = ""
+try {
+    const appConfig = JSON.parse(readFileSync(join(ROOT, "config", "config.json"), "utf-8"))
+    assetOrigin = (appConfig.PUBLIC_STATIC_ASSET_URL || "").trim()
+} catch {
+    /* no config.json / unreadable — nothing to strip */
+}
+const stripOrigin = (s) => (assetOrigin ? s.split(assetOrigin).join("") : s)
+
+// Recursively strip the origin from matching text files in a directory (in place).
+const stripDir = (dir, re, skip = () => false) => {
+    if (!assetOrigin || !existsSync(dir)) return
+    for (const f of readdirSync(dir)) {
+        const full = join(dir, f)
+        if (skip(full)) continue
+        if (statSync(full).isDirectory()) stripDir(full, re, skip)
+        else if (re.test(f)) {
+            const before = readFileSync(full, "utf-8")
+            const after = stripOrigin(before)
+            if (after !== before) writeFileSync(full, after)
+        }
+    }
+}
+
+// Server bundle: strip the baked publicAssetPath from the compiled JS + loadable-stats the
+// worker bundles/reads (build/*.js, build/renderer, build/utils). Skip build/public (client
+// assets, staged and stripped below) and build/data (app JSON content — must not be rewritten).
+const BUILD_DATA_DIR = join(ROOT, "build", "data")
+stripDir(join(ROOT, "build"), /\.(js|json)$/, (p) => p === BUILD_PUBLIC || p === BUILD_DATA_DIR)
+
+// 2. server/data -> build/data
 if (existsSync(join(ROOT, "server", "data"))) {
     cpSync(join(ROOT, "server", "data"), join(ROOT, "build", "data"), { recursive: true })
 }
 
-// 2. stage assets
+// 3. stage assets, rewriting the baked asset origin in text assets.
 const DIST_PUBLIC = join(ROOT, "dist", "public")
 rmSync(DIST_PUBLIC, { recursive: true, force: true })
 mkdirSync(join(DIST_PUBLIC, "assets"), { recursive: true })
 cpSync(BUILD_PUBLIC, join(DIST_PUBLIC, "assets"), { recursive: true })
+stripDir(join(DIST_PUBLIC, "assets"), /\.(js|json|css|html|map)$/)
+// App static files served at the site root: the app's `public/` tree (favicon, images,
+// etc.), which Catalyst serves in the Node target via express.static middleware. On Workers
+// there is no fs for express.static to read, so stage public/ into dist/public and let
+// Workers Assets serve it at the same URL paths (e.g. /blog-thumbs/x.svg).
+if (existsSync(join(ROOT, "public"))) {
+    cpSync(join(ROOT, "public"), DIST_PUBLIC, { recursive: true })
+}
+// Build-generated SW/offline/manifest win over any same-named file staged from public/.
 for (const f of ["catalyst-sw.js", "offline.html", "catalyst-offline-manifest.json"]) {
     const src = join(BUILD_PUBLIC, f)
-    if (existsSync(src)) cpSync(src, join(DIST_PUBLIC, f))
-}
-if (existsSync(join(ROOT, "public", "favicon.ico"))) {
-    cpSync(join(ROOT, "public", "favicon.ico"), join(DIST_PUBLIC, "favicon.ico"))
+    if (existsSync(src)) writeFileSync(join(DIST_PUBLIC, f), stripOrigin(readFileSync(src, "utf-8")))
 }
 
-// 3. generate fs-assets map (loadable-stats.json + *.css, keyed by basename)
+// 4. generate fs-assets map (loadable-stats.json + *.css, keyed by basename), origin-stripped.
 const map = {}
 for (const f of readdirSync(BUILD_PUBLIC)) {
     const full = join(BUILD_PUBLIC, f)
     if (statSync(full).isFile() && /\.(json|css)$/.test(f)) {
-        map[f] = readFileSync(full, "utf-8")
+        map[f] = stripOrigin(readFileSync(full, "utf-8"))
     }
 }
 mkdirSync(join(ROOT, "worker"), { recursive: true })
@@ -56,5 +107,6 @@ writeFileSync(
 )
 
 console.log(
-    `catalyst-cloudflare prebuild: staged ${readdirSync(join(DIST_PUBLIC, "assets")).length} assets, embedded ${Object.keys(map).length} fs files`,
+    `catalyst-cloudflare prebuild: worker "${cfg.name}", staged ${readdirSync(join(DIST_PUBLIC, "assets")).length} assets, embedded ${Object.keys(map).length} fs files` +
+        (assetOrigin ? `, stripped asset origin ${assetOrigin}` : ""),
 )
